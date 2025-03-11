@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -7,12 +7,20 @@ import client from './layout/mqtt'
 
 function App() {
   const [count, setCount] = useState(0)
-  client.on("message", (topic, message) => {
-    // message is Buffer
+  const messageHandler = (topic, message) => {
     if (topic === "arec/temperature"){
-      setCount((count) => parseFloat(message.toString()));
+      setCount(() => parseFloat(message.toString()));
     }
-  });
+  }
+  
+
+  useEffect(() => {
+    client.on("message", messageHandler)
+
+    return () => {
+      client.off("message", messageHandler)
+    }
+  }, [])
   return (
     <>
       <div>

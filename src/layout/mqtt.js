@@ -14,7 +14,7 @@ const topic_temp = "arec/temperature";
 client.on("connect", () => {
   client.subscribe(topic_temp, (err) => {
     if (!err) {
-      client.publish(topic_temp, "Hello from app");
+      client.publish(topic_temp, "42");
       console.log("connected")
     }
   });
